@@ -1,0 +1,16 @@
+### Add Doctor
+POST http://localhost:8080/doctors
+Content-Type: application/json
+
+{
+  "name": "Dr. Priya",
+  "specialization": "Cardiology",
+  "averageConsultationMinutes": 15
+}
+
+###
+
+### View All Doctors
+GET http://localhost:8080/doctors
+
+###

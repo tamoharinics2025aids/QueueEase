@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>QueueEase - OPD Queue Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div>
+        <h1>QueueEase</h1>
+        <p>OPD Token & Queue Management System</p>
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="container">
+
+
+    <!-- ================= DASHBOARD ================= -->
+
+    <section class="dashboard">
+
+        <div class="dashboard-card">
+            <h3>Total Doctors</h3>
+            <p id="doctorCount">0</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Total Patients</h3>
+            <p id="patientCount">0</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Today's Tokens</h3>
+            <p id="tokenCount">0</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Waiting Tokens</h3>
+            <p id="waitingCount">0</p>
+        </div>
+
+    </section>
+
+
+    <!-- ================= MESSAGE ================= -->
+
+    <div id="messageBox" class="message hidden"></div>
+
+
+    <!-- ================= DOCTOR MANAGEMENT ================= -->
+
+    <section class="card">
+
+        <h2>Doctor Management</h2>
+
+        <div class="form-grid">
+
+            <div>
+                <label>Doctor Name</label>
+
+                <input
+                        type="text"
+                        id="doctorName"
+                        placeholder="Enter doctor name">
+            </div>
+
+
+            <div>
+                <label>Specialization</label>
+
+                <input
+                        type="text"
+                        id="doctorSpecialization"
+                        placeholder="Enter specialization">
+            </div>
+
+
+            <div>
+                <label>Average Consultation Time</label>
+
+                <input
+                        type="number"
+                        id="doctorTime"
+                        min="1"
+                        placeholder="Minutes">
+            </div>
+
+        </div>
+
+
+        <button onclick="addDoctor()">
+            Add Doctor
+        </button>
+
+
+        <h3 class="sub-heading">Registered Doctors</h3>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Specialization</th>
+                    <th>Consultation Time</th>
+                    <th>Current Token</th>
+                    <th>Actions</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="doctorTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= PATIENT MANAGEMENT ================= -->
+
+    <section class="card">
+
+        <h2>Patient Registration</h2>
+
+        <div class="form-grid">
+
+            <div>
+
+                <label>Patient Name</label>
+
+                <input
+                        type="text"
+                        id="patientName"
+                        placeholder="Enter patient name">
+
+            </div>
+
+
+            <div>
+
+                <label>Phone Number</label>
+
+                <input
+                        type="text"
+                        id="patientPhone"
+                        placeholder="Enter phone number">
+
+            </div>
+
+
+            <div>
+
+                <label>Email</label>
+
+                <input
+                        type="email"
+                        id="patientEmail"
+                        placeholder="Enter email">
+
+            </div>
+
+        </div>
+
+
+        <button onclick="addPatient()">
+            Register Patient
+        </button>
+
+
+        <h3 class="sub-heading">Registered Patients</h3>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="patientTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= TOKEN GENERATION ================= -->
+
+    <section class="card">
+
+        <h2>Generate OPD Token</h2>
+
+        <div class="form-grid">
+
+            <div>
+
+                <label>Select Doctor</label>
+
+                <select id="tokenDoctor">
+                    <option value="">Select Doctor</option>
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label>Select Patient</label>
+
+                <select id="tokenPatient">
+                    <option value="">Select Patient</option>
+                </select>
+
+            </div>
+
+
+            <div class="priority-container">
+
+                <label>Token Type</label>
+
+                <label class="priority-option">
+
+                    <input
+                            type="checkbox"
+                            id="priorityToken">
+
+                    Emergency / Priority
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <button onclick="generateToken()">
+            Generate Token
+        </button>
+
+    </section>
+
+
+    <!-- ================= CURRENT QUEUE ================= -->
+
+    <section class="card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Today's Queue</h2>
+
+                <p>
+                    Select a doctor to view the current queue.
+                </p>
+
+            </div>
+
+
+            <button onclick="loadQueue()">
+                Refresh Queue
+            </button>
+
+        </div>
+
+
+        <div class="queue-filter">
+
+            <select id="queueDoctor">
+
+                <option value="">
+                    Select Doctor
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>Token</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Estimated Wait</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="queueTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SERVE TOKEN ================= -->
+
+    <section class="card serve-card">
+
+        <h2>Serve Next Patient</h2>
+
+        <p class="description">
+            Priority tokens are served before normal waiting tokens.
+        </p>
+
+
+        <div class="serve-controls">
+
+            <select id="serveDoctor">
+
+                <option value="">
+                    Select Doctor
+                </option>
+
+            </select>
+
+
+            <button onclick="serveNextToken()">
+                Serve Next Token
+            </button>
+
+        </div>
+
+
+        <div id="servedToken" class="served-token hidden"></div>
+
+    </section>
+
+
+    <!-- ================= TOKEN HISTORY ================= -->
+
+    <section class="card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Daily Token History</h2>
+
+                <p>
+                    Complete token history for today.
+                </p>
+
+            </div>
+
+
+            <button onclick="loadHistory()">
+                Refresh History
+            </button>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>Token</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Wait Time</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="historyTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        QueueEase © 2026
+    </p>
+
+    <p>
+        OPD Token and Queue Management System
+    </p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
